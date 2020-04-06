@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 
 const { errorHandler } = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -12,7 +13,6 @@ const { DATABASE_URL, PORT } = require('./configuration/settings');
 
 const app = express();
 
-
 mongoose.connect(DATABASE_URL, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -20,11 +20,12 @@ mongoose.connect(DATABASE_URL, {
   useFindAndModify: false,
 });
 
+app.use(limiter);
+app.use(helmet());
 app.use(bodyParser.json());
 app.use(cookieParser()); // подписывать куки
 
 app.use(requestLogger);
-app.use(limiter);
 app.use(router);
 app.use(errorLogger);
 
