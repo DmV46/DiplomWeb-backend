@@ -5,11 +5,13 @@ const cookieParser = require('cookie-parser');
 
 const { errorHandler } = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { limiter } = require('./middlewares/rateLimit');
 
 const router = require('./routes/index');
 const { DATABASE_URL, PORT } = require('./configuration/settings');
 
 const app = express();
+
 
 mongoose.connect(DATABASE_URL, {
   useNewUrlParser: true,
@@ -22,9 +24,8 @@ app.use(bodyParser.json());
 app.use(cookieParser()); // подписывать куки
 
 app.use(requestLogger);
-
+app.use(limiter);
 app.use(router);
-
 app.use(errorLogger);
 
 // кастомный централизованный обработчик ошибок
