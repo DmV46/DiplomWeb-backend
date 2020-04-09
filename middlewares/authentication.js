@@ -1,5 +1,9 @@
 const jwt = require('jsonwebtoken');
+
+const UnauthorizedError = require('../errors/UnauthorizedError');
+
 const { JWT_SECRET } = require('../configuration/settings');
+const { UNAUTHORIZED } = require('../configuration/constants');
 
 
 module.exports = (req, res, next) => {
@@ -8,7 +12,7 @@ module.exports = (req, res, next) => {
   try {
     playload = jwt.verify(token, JWT_SECRET);
   } catch (error) {
-    return res.status(401).send({ message: 'Необходима авторизация' });
+    throw new UnauthorizedError(UNAUTHORIZED);
   }
   req.user = playload;
 

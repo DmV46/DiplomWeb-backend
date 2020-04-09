@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const UnauthorizedError = require('../errors/UnauthorizedError');
+const ConflictError = require('../errors/ConflictError');
 
 const { JWT_SECRET } = require('../configuration/settings');
+const { CONFLICT_SIGN_UP } = require('../configuration/constants');
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
@@ -17,8 +19,8 @@ const signUp = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, email, password: hash }))
-    .then((user) => res.status(201).send({ data: user }))
-    .catch(next);
+    .then((user) => res.status(201).send(user.omitPrivate()))
+    .catch(() => next(new ConflictError(CONFLICT_SIGN_UP)));
 };
 
 const signIn = (req, res, next) => {

@@ -4,6 +4,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcryptjs');
 
 const { INVALID_MAIL } = require('../configuration/constants');
+const { ERROR_SIGN_IN } = require('../configuration/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -35,17 +36,24 @@ userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new Error('Неправильная почта или пароль'));
+        return Promise.reject(new Error(ERROR_SIGN_IN));
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new Error('Неправильная почта или пароль'));
+            return Promise.reject(new Error(ERROR_SIGN_IN));
           }
           return user;
         });
     });
+};
+
+userSchema.methods.omitPrivate = function omitPrivate() {
+  const data = this.toObject();
+  delete data.password;
+  delete data.__v;
+  return data;
 };
 
 module.exports = mongoose.model('user', userSchema);
