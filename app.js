@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const helmet = require('helmet');
 const errors = require('celebrate');
 const { errorHandler } = require('./middlewares/errorHandler');
@@ -22,8 +23,9 @@ mongoose.connect(DATABASE_URL, {
 
 app.use(limiter);
 app.use(helmet());
+app.use(cors());
 app.use(bodyParser.json());
-// app.use(cookieParser()); // подписывать куки
+app.use(cookieParser()); // подписывать куки
 
 app.use(requestLogger);
 app.use(router);
