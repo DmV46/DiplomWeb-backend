@@ -7,6 +7,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const corsOptions = {
   origin: '*',
   method: 'GET, POST OPTIONS, DELETE, HEAD',
+  preflightContinue: true,
+  optionsSuccessStatus: 204,
+  credentials: true,
 };
 
 module.exports = {
