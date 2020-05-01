@@ -10,7 +10,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { limiter } = require('./middlewares/rateLimit');
 
 const router = require('./routes/index');
-const { DATABASE_URL, PORT } = require('./configuration/settings');
+const { DATABASE_URL, PORT, corsOptions } = require('./configuration/settings');
 
 const app = express();
 
@@ -23,7 +23,7 @@ mongoose.connect(DATABASE_URL, {
 
 app.use(limiter);
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser()); // подписывать куки
 
