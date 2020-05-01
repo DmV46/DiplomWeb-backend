@@ -5,11 +5,11 @@ const PORT = process.env.PORT || 3000;
 const DATABASE_URL = process.env.DATABASE_URL || 'mongodb://localhost:27017/diplomweb';
 const isProduction = process.env.NODE_ENV === 'production';
 const corsOptions = {
-  origin: 'http://localhost:8080',
-  methods: 'GET, POST OPTIONS, DELETE, HEAD',
+  origin: '*',
+  methods: 'GET, POST, OPTIONS, DELETE, HEAD',
   preflightContinue: false,
   optionsSuccessStatus: 204,
-  credentials: true,
+  // credentials: true,
 };
 
 module.exports = {
