@@ -2,15 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const helmet = require('helmet');
-const errors = require('celebrate');
+const { errors } = require('celebrate');
 const { errorHandler } = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { limiter } = require('./middlewares/rateLimit');
 
 const router = require('./routes/index');
-const { DATABASE_URL, PORT, corsOptions } = require('./configuration/settings');
+const { DATABASE_URL, PORT } = require('./configuration/settings');
 
 const app = express();
 
@@ -23,7 +22,6 @@ mongoose.connect(DATABASE_URL, {
 
 app.use(limiter);
 app.use(helmet());
-app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(cookieParser()); // подписывать куки
 
