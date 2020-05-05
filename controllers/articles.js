@@ -5,7 +5,7 @@ const ForbiddenError = require('../errors/ForbiddenError');
 const { ITEM_NOT_FOUND, FORBIDDEN_ERROR } = require('../configuration/constants');
 
 const getArticles = (req, res, next) => {
-  Article.find({})
+  Article.find({ owner: req.user._id })
     .then((articles) => res.send(articles.map((article) => article.omitPrivate())))
     .catch(next);
 };
