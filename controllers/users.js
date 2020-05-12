@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const UnauthorizedError = require('../errors/UnauthorizedError');
 const ConflictError = require('../errors/ConflictError');
 
 const { JWT_SECRET } = require('../configuration/settings');
@@ -35,7 +36,7 @@ const signIn = (req, res, next) => {
         })
         .send({ token });
     })
-    .catch(next);
+    .catch((err) => next(new UnauthorizedError(err)));
 };
 
 module.exports = { getUser, signUp, signIn };
