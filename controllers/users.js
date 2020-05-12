@@ -36,7 +36,7 @@ const signIn = (req, res, next) => {
         })
         .send({ token });
     })
-    .catch((err) => next(new UnauthorizedError(err)));
+    .catch(next);
 };
 
 module.exports = { getUser, signUp, signIn };
